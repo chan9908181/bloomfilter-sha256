@@ -1,6 +1,7 @@
 (function(exports) {
   exports.BloomFilter = BloomFilter;
   exports.fnv_1a = fnv_1a;
+  const crypto = require('crypto');
 
   var typedArrays = typeof ArrayBuffer !== "undefined";
 
@@ -35,18 +36,16 @@
 
   // See http://willwhim.wpengine.com/2011/09/03/producing-n-hash-functions-by-hashing-only-once/
   BloomFilter.prototype.locations = function(v) {
-    var k = this.k,
-        m = this.m,
-        r = this._locations,
-        a = fnv_1a(v),
-        b = fnv_1a(v, 1576284489), // The seed value is chosen randomly
-        x = a % m;
-    for (var i = 0; i < k; ++i) {
-      r[i] = x < 0 ? (x + m) : x;
-      x = (x + b) % m;
+    var k = this.k;
+        m = this.m;
+        r = this._locations;
+        const hash = sha256(v);
+    for (let i = 0; i < k; i++) {
+      const part = hash.slice(i * 8, (i + 1) * 8); // Use 8 hex characters per position
+      r[i] = parseInt(part, 16) % m;
     }
     return r;
-  };
+    };
 
   BloomFilter.prototype.add = function(v) {
     var l = this.locations(v + ""),
@@ -111,5 +110,8 @@
     a ^= a >>> 17;
     a += a << 5;
     return a & 0xffffffff;
+  }
+  function sha256(v) {
+    return crypto.createHash('sha256').update(v).digest('hex'); // Returns a 64-character hex string
   }
 })(typeof exports !== "undefined" ? exports : this);
