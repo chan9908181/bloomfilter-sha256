@@ -1,6 +1,5 @@
 (function(exports) {
   exports.BloomFilter = BloomFilter;
-  exports.fnv_1a = fnv_1a;
   const crypto = require('crypto');
 
   var typedArrays = typeof ArrayBuffer !== "undefined";
@@ -35,7 +34,7 @@
   }
 
   // See http://willwhim.wpengine.com/2011/09/03/producing-n-hash-functions-by-hashing-only-once/
-  BloomFilter.prototype.locations = function(v) {
+  exports.BloomFilter.prototype.locations = function(v) {
     var k = this.k;
         m = this.m;
         r = this._locations;
@@ -86,31 +85,6 @@
   // Nonstandard variation: this function optionally takes a seed value that is incorporated
   // into the offset basis. According to http://www.isthe.com/chongo/tech/comp/fnv/index.html
   // "almost any offset_basis will serve so long as it is non-zero".
-  function fnv_1a(v, seed) {
-    var a = 2166136261 ^ (seed || 0);
-    for (var i = 0, n = v.length; i < n; ++i) {
-      var c = v.charCodeAt(i),
-          d = c & 0xff00;
-      if (d) a = fnv_multiply(a ^ d >> 8);
-      a = fnv_multiply(a ^ c & 0xff);
-    }
-    return fnv_mix(a);
-  }
-
-  // a * 16777619 mod 2**32
-  function fnv_multiply(a) {
-    return a + (a << 1) + (a << 4) + (a << 7) + (a << 8) + (a << 24);
-  }
-
-  // See https://web.archive.org/web/20131019013225/http://home.comcast.net/~bretm/hash/6.html
-  function fnv_mix(a) {
-    a += a << 13;
-    a ^= a >>> 7;
-    a += a << 3;
-    a ^= a >>> 17;
-    a += a << 5;
-    return a & 0xffffffff;
-  }
   function sha256(v) {
     return crypto.createHash('sha256').update(v).digest('hex'); // Returns a 64-character hex string
   }
