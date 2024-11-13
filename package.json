@@ -3,6 +3,7 @@
   "version": "0.0.18",
   "license" : "BSD-3-Clause",
   "description": "Fast bloom filter in JavaScript.",
+  "types": "index.d.ts",
   "keywords": [
     "bloom filter",
     "probabilistic data structure"
