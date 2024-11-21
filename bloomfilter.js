@@ -81,10 +81,7 @@
     return ((v + (v >> 4) & 0xf0f0f0f) * 0x1010101) >> 24;
   }
 
-  // Fowler/Noll/Vo hashing.
-  // Nonstandard variation: this function optionally takes a seed value that is incorporated
-  // into the offset basis. According to http://www.isthe.com/chongo/tech/comp/fnv/index.html
-  // "almost any offset_basis will serve so long as it is non-zero".
+  // sha-256 cryptographic hashing.
   function sha256(v) {
     return crypto.createHash('sha256').update(v).digest('hex'); // Returns a 64-character hex string
   }
