@@ -1,9 +1,10 @@
 {
   "name": "bloomfilter",
   "version": "0.0.18",
-  "license" : "BSD-3-Clause",
+  "license": "BSD-3-Clause",
   "description": "Fast bloom filter in JavaScript.",
   "types": "index.d.ts",
+  "type": "module",
   "keywords": [
     "bloom filter",
     "probabilistic data structure"
